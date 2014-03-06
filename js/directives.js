@@ -41,6 +41,13 @@ angular.module('ng').directive('ngSpinner', function () {
 					}
 				}
 			});
+			element.on('blur', function () {
+				if (scope.ngSpinner != element.spinner('value')) {
+					safeApply(scope, function () {
+						scope.ngSpinner = element.spinner('value');
+					});
+				}
+			});
 			element.numeric();
 			scope.$watch('ngSpinner', function (nv, ov) {
 				if (nv != ov) {
@@ -48,13 +55,13 @@ angular.module('ng').directive('ngSpinner', function () {
 				}
 			});
 			scope.$watch('ngMin', function (nv, ov) {
-				if (nv != ov) {
+				if (nv != ov || nv != element.spinner('option', 'min')) {
 					element.spinner('option', 'min', nv);
 					checkBounds();
 				}
 			});
 			scope.$watch('ngMax', function (nv, ov) {
-				if (nv != ov) {
+				if (nv != ov || nv != element.spinner('option', 'max')) {
 					element.spinner('option', 'max', nv);
 					checkBounds();
 				}
