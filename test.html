@@ -5,7 +5,6 @@
 	<!-- Bootstrap core CSS -->
 	<link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/jquery-ui.css" rel="stylesheet">
-	<link href="css/highlight-styles.css" rel="stylesheet">
 	
 	<!-- Javascript -->
 	<script type="text/javascript" src="js/jquery-2.1.0.min.js" ></script>
@@ -23,7 +22,8 @@
 <div class="col-md-12" ng-controller="test">
 
 	<H3>Basic example:</H3>
-	<input ng-spinner="xxx" ng-min="xmin" ng-max="xmax" /><br/>
+	<input ng-spinner="xxx" ng-min="xmin" ng-max="xmax" />
+	<br/>
 	<ul>
 		<li>angular value: {{ xxx }}</li>
 		<li>min value: {{ xmin }}</li>
@@ -41,9 +41,15 @@
 	<button class="btn btn-default" ng-click="xmax=null">clear max</button>
 	<br>
 	<H3>Now for some hardcoded bounds: </H3>
-	<input ng-spinner="xxx2" ng-min="2" ng-max="12" /> (2-12)<br/>
-	Unfortunatelly they don't work with each other:<br/>
+	<input ng-spinner="xxx2" ng-min="2" ng-max="12" /> (2-12)
+	<br/>
+	Unfortunatelly they don't work with each other:
+	<br/>
 	<input ng-spinner="xxx2" ng-min="0" ng-max="5" /> (0-5)
+	<H3>Disable test: </H3>
+	<input type="checkbox" ng-model="disableTest" />
+	Disabled: 
+	<input ng-spinner="xxx2" ng-min="2" ng-max="12" ng-disabled="disableTest" /> (2-12) {{disableTest | json}}
 </div>
 </div>
 </div>

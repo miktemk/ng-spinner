@@ -9,7 +9,8 @@ angular.module('ng').directive('ngSpinner', function () {
 		scope: {
 			ngSpinner: '=',
 			ngMin: '=',
-			ngMax: '='
+			ngMax: '=',
+			ngDisabled: '='
 		},
 		link: function (scope, element, attrs) {
 			function checkBounds() {
@@ -66,6 +67,11 @@ angular.module('ng').directive('ngSpinner', function () {
 					checkBounds();
 				}
 			});
+			scope.$watch('ngDisabled', function (nv, ov) {
+				if (nv != ov) {
+					nv ? element.spinner('disable') : element.spinner('enable');
+				}
+			})
 		}
 	};
 });
