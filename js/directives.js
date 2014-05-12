@@ -23,6 +23,7 @@ angular.module('ng').directive('ngSpinner', function () {
 			element.spinner({
 				min: scope.ngMin,
 				max: scope.ngMax,
+				disabled: scope.ngDisabled,
 				spin: function (event, ui) {
 					if (scope.ngSpinner != ui.value) {
 						safeApply(scope, function () {
