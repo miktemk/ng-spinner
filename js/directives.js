@@ -10,12 +10,13 @@ angular.module('ng').directive('ngSpinner', function () {
 			ngSpinner: '=',
 			ngMin: '=',
 			ngMax: '=',
-			ngDisabled: '='
+			ngDisabled: '=',
+			ngReset: '='
 		},
 		link: function (scope, element, attrs) {
 			function checkBounds() {
 				if (scope.ngMin != null && scope.ngMin != undefined
-					&& (scope.ngSpinner < scope.ngMin || !scope.ngSpinner))
+					&& (scope.ngSpinner < scope.ngMin || (!scope.ngSpinner && scope.ngReset)))
 					scope.ngSpinner = scope.ngMin;
 				if (scope.ngMax != null && scope.ngMax != undefined && scope.ngSpinner > scope.ngMax)
 					scope.ngSpinner = scope.ngMax;
