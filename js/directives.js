@@ -1,4 +1,5 @@
-angular.module('ng').directive('ngSpinner', function () {
+angular.module('miktemk', ['ng']);
+angular.module('miktemk').directive('ngSpinner', function () {
 	function safeApply($scope, callback) {
 		($scope.$$phase || $scope.$root.$$phase)
 			? callback()
@@ -10,6 +11,7 @@ angular.module('ng').directive('ngSpinner', function () {
 			ngSpinner: '=',
 			ngMin: '=',
 			ngMax: '=',
+			ngStep: '=',
 			ngDisabled: '=',
 			ngReset: '='
 		},
@@ -21,11 +23,18 @@ angular.module('ng').directive('ngSpinner', function () {
 					scope.ngSpinner = scope.ngMin;
 				if (scope.ngMax != null && scope.ngMax != undefined && scope.ngSpinner > scope.ngMax)
 					scope.ngSpinner = scope.ngMax;
+				if (scope.boundByInt32 && scope.ngSpinner > 2147483647)
+					scope.ngSpinner = 2147483647; // Int32.MaxValue
 			}
-			element.val(scope.ngSpinner);
-			element.spinner({
+			if (scope.ngMax == null || scope.ngMax == undefined)
+				scope.boundByInt32 = true;
+			var $spinner = $(element);
+			$spinner.val(scope.ngSpinner);
+			$spinner.spinner({
 				min: scope.ngMin,
 				max: scope.ngMax,
+				step: scope.ngStep,
+				value: $(this).attr('aria-valuenow'),
 				disabled: scope.ngDisabled,
 				spin: function (event, ui) {
 					if (scope.ngSpinner != ui.value) {
@@ -37,45 +46,51 @@ angular.module('ng').directive('ngSpinner', function () {
 				change: function (event, ui) {
 					if (event.handleObj && event.handleObj.type == "blur") {
 						safeApply(scope, function () {
-							scope.ngSpinner = element.spinner('value');
+							scope.ngSpinner = $spinner.spinner('value');
 							checkBounds();
 							// bounds check changed something! naughty naughty!
-							if (scope.ngSpinner != element.spinner('value'))
-								element.spinner('value', scope.ngSpinner);
+							if (scope.ngSpinner != $spinner.spinner('value'))
+								$spinner.spinner('value', scope.ngSpinner);
 						});
 					}
 				}
 			});
-			element.on('blur', function () {
-				if (scope.ngSpinner != element.spinner('value')) {
+			$spinner.on('keyup', function (e) {
+				if (scope.ngSpinner != $spinner.spinner('value')) {
 					safeApply(scope, function () {
-						scope.ngSpinner = element.spinner('value');
+						scope.ngSpinner = $spinner.spinner('value');
 					});
 				}
 			});
-			element.numeric();
+			$spinner.numeric();
 			scope.$watch('ngSpinner', function (nv, ov) {
 				if (nv != ov) {
-					element.spinner('value', nv);
+					$spinner.spinner('value', nv);
 				}
 			});
 			scope.$watch('ngMin', function (nv, ov) {
-				if (nv != ov || nv != element.spinner('option', 'min')) {
-					element.spinner('option', 'min', nv);
+				if (nv != ov || nv != $spinner.spinner('option', 'min')) {
+					$spinner.spinner('option', 'min', nv);
 					checkBounds();
 				}
 			});
 			scope.$watch('ngMax', function (nv, ov) {
-				if (nv != ov || nv != element.spinner('option', 'max')) {
-					element.spinner('option', 'max', nv);
+				if (nv != ov || nv != $spinner.spinner('option', 'max')) {
+					$spinner.spinner('option', 'max', nv);
+					checkBounds();
+				}
+			});
+			scope.$watch('ngStep', function (nv, ov) {
+				if (nv != ov || nv != $spinner.spinner('option', 'step')) {
+					$spinner.spinner('option', 'step', nv ? nv : 1);
 					checkBounds();
 				}
 			});
 			scope.$watch('ngDisabled', function (nv, ov) {
 				if (nv != ov) {
-					nv ? element.spinner('disable') : element.spinner('enable');
+					nv ? $spinner.spinner('disable') : $spinner.spinner('enable');
 				}
-			})
+			});
 		}
 	};
 });

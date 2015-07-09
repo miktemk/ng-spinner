@@ -15,19 +15,20 @@
 	<script type="text/javascript" src="js/directives.js"></script>
 	<script type="text/javascript" src="js/zscript.js"></script>
 </head>
-<body ng-app>
+<body ng-app="miktemk">
 	
 <div class="container ">
 <div class="row">
-<div class="col-md-12" ng-controller="test">
+<div class="col-md-12" ng-controller="testController">
 
 	<H3>Basic example:</H3>
-	<input ng-spinner="xxx" ng-min="xmin" ng-max="xmax" />
+	<input ng-spinner="xxx" ng-min="xmin" ng-max="xmax" ng-step="xstep" />
 	<br/>
 	<ul>
 		<li>angular value: {{ xxx }}</li>
 		<li>min value: {{ xmin }}</li>
 		<li>max value: {{ xmax }}</li>
+		<li>step value: {{ xstep }}</li>
 	</ul>
 	<button class="btn btn-default" ng-click="xxx=3">Set to 3</button>
 	<button class="btn btn-default" ng-click="xxx=6">Set to 6</button>
@@ -40,7 +41,14 @@
 	<button class="btn btn-default" ng-click="xmin=null">clear min</button>
 	<button class="btn btn-default" ng-click="xmax=null">clear max</button>
 	<br>
+	<button class="btn btn-default" ng-click="xstep=1">step=1</button>
+	<button class="btn btn-default" ng-click="xstep=2">step=2</button>
+	<button class="btn btn-default" ng-click="xstep=null">step=null</button>
+	<br>
 	<H3>Now for some hardcoded bounds: </H3>
+	<ul>
+		<li>angular value2: {{ xxx2 }} (initially null)</li>
+	</ul>
 	<input ng-spinner="xxx2" ng-min="2" ng-max="12" /> (2-12)
 	<br/>
 	Unfortunatelly they don't work with each other:
